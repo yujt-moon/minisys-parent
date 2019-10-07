@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moon.minisys.busi.dao.BookDao">
+    <sql id="Book_Column">
+      id,
+      name,
+      price,
+      pic,
+      description
+    </sql>
+
+    <select id="queryBooks" resultType="com.moon.minisys.busi.pojo.Book">
+      SELECT
+        <include refid="Book_Column" />
+      FROM
+        BOOK
+    </select>
+</mapper>

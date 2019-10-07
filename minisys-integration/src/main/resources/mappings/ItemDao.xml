@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moon.minisys.busi.dao.ItemDao">
+    <sql id="Item_Column">
+      item.ID AS id,
+      item.TITLE AS title,
+      item.SELL_POINT AS sellPoint,
+      item.PRICE AS price,
+      item.NUM AS num,
+      item.BARCODE AS barcode,
+      item.IMAGE AS image,
+      item.CID AS cid,
+      item.STATUS AS status,
+      item.CREATED AS created,
+      item.UPDATED AS updated
+    </sql>
+
+    <select id="getItems" parameterType="com.moon.minisys.busi.pojo.Item" resultType="com.moon.minisys.busi.pojo.Item">
+      SELECT
+        <include refid="Item_Column"/>,
+        cat.NAME AS categoryName
+      FROM
+        TB_ITEM item
+      LEFT JOIN
+        TB_ITEM_CAT cat
+      ON
+        item.CID = cat.ID
+      <where>
+        <if test="title != null and title != ''">
+          AND TITLE LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="cid != null and cid != ''">
+          AND item.CID = #{cid}
+        </if>
+      </where>
+      ORDER BY
+        ID DESC
+    </select>
+</mapper>

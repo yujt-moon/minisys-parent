@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moon.minisys.busi.dao.RoleDao">
+    <sql id="Role_Column">
+      ID,
+      ROLE,
+      DESCRIPTION,
+      AVAILABLE
+    </sql>
+
+    <insert id="createRole" parameterType="com.moon.minisys.busi.pojo.Role"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            SYS_ROLES (
+                ROLE,
+                DESCRIPTION,
+                AVAILABLE
+            ) VALUES (
+                #{role.role},
+                #{role.description},
+                #{role.available}
+            )
+    </insert>
+
+    <delete id="deleteRole">
+        DELETE FROM
+            SYS_USERS_ROLES
+        WHERE
+            ROLE_ID = #{roleId}
+    </delete>
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moon.minisys.busi.dao.UserDao">
+    <sql id="User_Column">
+      ID,
+      USERNAME,
+      PASSWORD,
+      SALT,
+      LOCKED
+    </sql>
+
+    <!-- 创建用户 -->
+    <insert id="createUser" parameterType="com.moon.minisys.busi.pojo.User"
+            useGeneratedKeys="true" keyProperty="user.id">
+        INSERT INTO
+            SYS_USERS(
+                USERNAME,
+                PASSWORD,
+                SALT,
+                LOCKED
+            ) VALUES (
+                #{user.username},
+                #{user.password},
+                #{user.salt},
+                #{user.locked}
+            )
+    </insert>
+
+    <insert id="correlationRoles">
+        INSERT INTO
+            SYS_USERS_ROLES (
+                USER_ID,
+                ROLE_ID
+            )
+        VALUES
+        <foreach collection="roleIds" separator="," item="roleId">
+            (
+                #{userId},
+                #{roleId}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateUser" parameterType="com.moon.minisys.busi.pojo.User">
+        UPDATE
+            SYS_USERS
+        SET
+            USERNAME = #{user.username},
+            PASSWORD = #{user.password},
+            SALT = #{user.salt},
+            LOCKED = #{user.locked}
+        WHERE
+            ID = #{user.id}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM
+            SYS_USERS
+        WHERE
+            ID = #{id}
+    </delete>
+
+    <delete id="uncorrelationRoles">
+        DELETE FROM
+            SYS_USERS_ROLES
+        WHERE
+            USER_ID = #{userId}
+        AND
+            ROLE_ID
+        IN
+            <foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+                #{roleId}
+            </foreach>
+    </delete>
+
+    <select id="exists" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            SYS_USERS_ROLES
+        WHERE
+            USER_ID = #{userId}
+        AND
+            ROLE_ID = #{roleId}
+    </select>
+
+    <select id="findOne" resultType="com.moon.minisys.busi.pojo.User">
+        SELECT
+            <include refid="User_Column"/>
+        FROM
+            SYS_USERS
+        WHERE
+            ID = #{userId}
+    </select>
+
+    <select id="findByUsername" resultType="com.moon.minisys.busi.pojo.User">
+        SELECT
+            <include refid="User_Column"/>
+        FROM
+            SYS_USERS
+        WHERE
+            USERNAME = #{username}
+    </select>
+
+    <select id="findRoles" resultType="java.lang.String">
+        SELECT
+            r.ROLE
+        FROM
+            SYS_USERS u,
+            SYS_ROLES r,
+            SYS_USERS_ROLES ur
+        WHERE
+            u.ID = ur.USER_ID
+        AND
+            r.ID = ur.ROLE_ID
+        AND
+            u.USERNAME = #{username}
+    </select>
+
+    <select id="findPermissions" resultType="java.lang.String">
+        SELECT
+            p.PERMISSION
+        FROM
+            SYS_USERS u,
+            SYS_ROLES r,
+            SYS_PERMISSIONS p,
+            SYS_USERS_ROLES ur,
+            SYS_ROLES_PERMISSIONS rp
+        WHERE
+            u.ID = ur.USER_ID
+        AND
+            r.ID = ur.ROLE_ID
+        AND
+            r.ID = rp.ROLE_ID
+        AND
+            p.ID = rp.PERMISSION_ID
+        AND
+            u.USERNAME = #{username}
+    </select>
+
+    <select id="getAllUsers" resultType="com.moon.minisys.busi.pojo.User">
+        select
+            <include refid="User_Column"/>
+        from
+            sys_users
+    </select>
+</mapper>

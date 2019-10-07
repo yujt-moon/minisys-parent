@@ -1,0 +1,59 @@
+.hide {
+    display: none;
+}
+
+.w-25p {
+    width: 25%;
+}
+
+.theme-light-green {
+    background-color: #5FB878;
+}
+
+.theme-light-blue {
+    background-color: #007bff;
+}
+
+.theme-dark-grey {
+    background-color: #999999;
+}
+
+.theme-light-grey {
+    background-color: #C0C0C0;
+}
+
+.theme-black {
+    background-color: #0C0C0C;
+}
+
+.font-defalut {
+
+}
+
+.mini-menu {
+    width: 200px;
+    display: inline-block;
+    float: left;
+    height: 100%;
+}
+
+.sub-menu {
+    background-color: #161616;
+}
+
+.menu-font a {
+    font-size: medium;
+    color: #C0C0C0;
+}
+
+.menu-font a:hover {
+    color: #ffffff;
+}
+
+.mt-10 {
+    margin-top: 10px !important;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}

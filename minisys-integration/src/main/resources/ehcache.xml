@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ehcache>
+    <cache name="shiro-activeSession"
+            maxEntriesLocalHeap="10000"
+            overflowToDisk="false"
+            eternal="false"
+            diskPersistent="false"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            statistics="true">
+
+    </cache>
+</ehcache>

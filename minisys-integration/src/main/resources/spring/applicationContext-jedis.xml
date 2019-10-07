@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- jedis连接池的配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 最小能够保持idel状态的对象数 -->
+        <property name="minIdle" value="${redis.minIdle}" />
+        <!-- 最大能够保持idel状态的对象数 -->
+        <property name="maxIdle" value="${redis.maxIdle}" />
+        <!-- 最大分配对象数 -->
+        <property name="maxTotal" value="${redis.maxTotal}" />
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+        <property name="testOnReturn" value="${redis.testOnReturn}" />
+    </bean>
+
+    <bean id="redisClient" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="host" value="${redis.host}" />
+        <constructor-arg name="port" value="${redis.port}" />
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig" />
+    </bean>
+
+    <!-- 单机的redis的客户端 -->
+    <bean id="jedisClient" class="com.moon.minisys.jedis.JedisClientSingle">
+        <property name="jedisPool" ref="redisClient" />
+    </bean>
+
+    <!--<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+        <constructor-arg index="0">
+            <set>
+                <bean class="redis.clients.jedis.HostAndPort">
+                    <constructor-arg index="0" value="${redis.host}" />
+                    <constructor-arg index="1" value="${redis.port}" />
+                </bean>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="1" ref="jedisPoolConfig" />
+    </bean>-->
+</beans>

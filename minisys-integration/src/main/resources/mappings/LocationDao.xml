@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moon.minisys.busi.dao.LocationDao">
+    <sql id="Location_Column">
+      id AS id,
+      lng AS lng,
+      lat AS lat,
+      location_name AS locationName
+    </sql>
+
+    <!-- 查询所有的位置信息 -->
+    <select id="getLocations" resultType="com.moon.minisys.busi.pojo.Location">
+      SELECT
+        <include refid="Location_Column" />
+      FROM
+        Location
+    </select>
+
+    <!-- 查询方形区域的位置信息 -->
+    <select id="getNearbyLocations" parameterType="java.util.Map" resultType="com.moon.minisys.busi.pojo.Location">
+        SELECT
+          <include refid="Location_Column" />
+        FROM
+          Location
+        WHERE
+          lng BETWEEN #{minlng} AND #{maxlng}
+        AND
+          lat BETWEEN #{minlat} AND #{maxlat}
+    </select>
+
+    <!-- 查询圆形区域的位置信息？？（有问题） -->
+    <select id="getRadiusLocations" parameterType="java.util.Map" resultType="com.moon.minisys.busi.pojo.Location">
+        SELECT
+          <include refid="Location_Column" />
+        FROM
+          Location
+        WHERE
+          lat &gt; #{lat} - #{distance}/ 1000 / 111
+        AND
+          lat &lt; #{lat} + #{distance} / 1000 / 111
+        AND
+          lng &gt; #{lng} - #{distance} / 1000 / 111
+        AND
+          lng &lt; #{lng} + #{distance} / 1000 / 111
+        ORDER BY ACOS(SIN((#{lat} * 3.1415) / 180 ) *SIN((lat * 3.1415) / 180 ) +COS((#{lat} * 3.1415) / 180 ) *
+        COS((lat * 3.1415) / 180 ) *COS((#{lng}* 3.1415) / 180 - (lng * 3.1415) / 180 ) ) * 6380 asc
+    </select>
+</mapper>
