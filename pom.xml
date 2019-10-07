@@ -40,7 +40,7 @@
         <aspectj.version>1.8.6</aspectj.version>
         <cglib.version>2.2</cglib.version>
         <aopalliance.version>1.0</aopalliance.version>
-        <lucene.version>4.10.3</lucene.version>
+        <lucene.version>8.2.0</lucene.version>
         <csv.version>1.5</csv.version>
         <poi.version>3.17</poi.version>
     </properties>
